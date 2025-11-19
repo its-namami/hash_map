@@ -34,7 +34,7 @@ class HashMap
   def set_bucket(index, key_val)
     raise IndexError if index.negative? || index >= buckets.length
 
-    double_capacity if buckets.size > capacity / LOAD_FACTOR
+    double_capacity if buckets.select(&:nil?).size < capacity - capacity * LOAD_FACTOR
 
     buckets[index] = key_val
   end
@@ -45,7 +45,7 @@ class HashMap
     self.buckets = Array.new(capacity)
 
     old_buckets.each do |bucket|
-      set_bucket(bucket[0] % capacity, bucket[1])
+      set_bucket(bucket[0] % capacity, bucket[1]) if bucket
     end
   end
 
