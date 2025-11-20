@@ -2,6 +2,8 @@
 
 require 'debug'
 
+require_relative 'linked_list'
+
 # Class that managess hash map
 class HashMap
   LOAD_FACTOR = 0.75
@@ -12,7 +14,7 @@ class HashMap
   end
 
   def hash(string)
-    string.each_char.inject(33) { |hash, char| hash * 5381 + char.to_s.ord }
+    string.each_char.inject(33) { |hash, char| hash * 5381 + char.to_s.ord * 7 }
   end
 
   def set(key, value)
@@ -24,19 +26,35 @@ class HashMap
   def get(key)
     hash_key = hash(key)
 
-    find = buckets.find { |bucket| !bucket.nil? && bucket[0].eql?(hash_key) }
+    result = nil
 
-    find ? find[1] : nil
+    buckets.each do |bucket|
+      next if bucket.nil?
+
+      result = bucket.find(hash_key)
+
+      break if result
+    end
+
+    result
   end
 
   private
 
+  def overloaded?
+    buckets.select(&:nil?).size < capacity - capacity * LOAD_FACTOR
+  end
+
   def set_bucket(index, key_val)
     raise IndexError if index.negative? || index >= buckets.length
 
-    double_capacity if buckets.select(&:nil?).size < capacity - capacity * LOAD_FACTOR
+    if buckets[index]
+      buckets[index].add(key_val)
+    else
+      buckets[index] = LinkedList.new(key_val)
+    end
 
-    buckets[index] = key_val
+    double_capacity if overloaded?
   end
 
   def double_capacity
@@ -45,7 +63,9 @@ class HashMap
     self.buckets = Array.new(capacity)
 
     old_buckets.each do |bucket|
-      set_bucket(bucket[0] % capacity, bucket[1]) if bucket
+      next if bucket.nil?
+
+      bucket.each_keyval { |key, value| set_bucket(key % capacity, [key, value]) }
     end
   end
 
