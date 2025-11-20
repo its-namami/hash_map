@@ -25,18 +25,13 @@ class HashMap
 
   def get(key)
     hash_key = hash(key)
+    bucket = buckets[hash_key % capacity]
 
-    result = nil
+    bucket&.find(hash_key)
+  end
 
-    buckets.each do |bucket|
-      next if bucket.nil?
-
-      result = bucket.find(hash_key)
-
-      break if result
-    end
-
-    result
+  def has?(key)
+    !!get(key)
   end
 
   private

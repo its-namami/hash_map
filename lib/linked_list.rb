@@ -2,7 +2,7 @@
 
 require_relative 'node'
 
-# Class that manages a linked list and its nodes
+# Class that manages a linked list and its nodes, designed for hash map
 class LinkedList
   attr_reader :first_node
 
