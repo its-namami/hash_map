@@ -21,12 +21,21 @@ class LinkedList
   end
 
   def find(key)
-    key_search(key).value
+    key_search(key)&.value
   end
 
   def remove(key)
-    node = next_node_search(key: key) || return
-    node.next_node = node.next_node&.next_node
+    node = next_node_search(key: key)
+
+    if node
+      old_node = node.next_node.dup
+      node.next_node = node.next_node&.next_node
+      return old_node
+    end
+
+    search = key_search(key)
+
+    [search] if search
   end
 
   def each_keyval(node = first_node, &block)
@@ -55,9 +64,11 @@ class LinkedList
     find_node { |node| node.value.eql?(value) }
   end
 
-  def next_node_search(key:, value:)
-    return unless key || value
-
-    find_node { |node| node&.next_node&.key.eql?(key || value) }
+  def next_node_search(key: nil, value: nil)
+    if key
+      find_node { |node| node&.next_node&.key.eql?(key) }
+    elsif value
+      find_node { |node| node&.next_node&.value.eql?(value) }
+    end
   end
 end

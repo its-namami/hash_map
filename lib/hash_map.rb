@@ -28,7 +28,13 @@ class HashMap
 
   def remove(key)
     bucket = buckets[bucket_index(key)]
-    bucket.remove(key)
+    removed = bucket.remove(key)
+
+    return removed unless removed.instance_of?(Array)
+
+    buckets[bucket_index(key)] = nil
+
+    removed.first
   end
 
   private

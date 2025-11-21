@@ -66,7 +66,6 @@ puts hash_map.get('Bella Carter') == 30 ? 'Correct' : 'False'
 hash_map.set('Caleb Mitchell', 88)
 puts hash_map.get('Caleb Mitchell') == 88 ? 'Correct' : 'False'
 hash_map.set('Daisy Perez', 43)
-puts hash_map.get('Daisy Perez') == 43 ? 'Correct' : 'False'
 hash_map.set('Ethan Roberts', 97)
 puts hash_map.get('Ethan Roberts') == 97 ? 'Correct' : 'False'
 hash_map.set('Fiona Turner', 19)
@@ -109,4 +108,9 @@ hash_map.set('Zara Cooper', 77)
 puts hash_map.get('Zara Cooper') == 77 ? 'Correct' : 'False'
 hash_map.set('Adam Gray', 13)
 puts hash_map.get('Adam Gray') == 13 ? 'Correct' : 'False'
+puts hash_map.remove('Adam Gray')
 puts hash_map.has?('Adam Gray')
+puts hash_map.remove('Daisy Perez')
+puts hash_map.get('Daisy Perez') == 43 ? 'False' : 'Correct'
+puts hash_map.remove('Wyatt Rivera')
+puts hash_map.has?('Wyatt Rivera')
