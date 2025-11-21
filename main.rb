@@ -72,18 +72,6 @@ hash_map.set('Fiona Turner', 19)
 puts hash_map.get('Fiona Turner') == 19 ? 'Correct' : 'False'
 hash_map.set('George Phillips', 64)
 puts hash_map.get('George Phillips') == 64 ? 'Correct' : 'False'
-hash_map.set('Hannah Campbell', 5)
-puts hash_map.get('Hannah Campbell') == 5 ? 'Correct' : 'False'
-hash_map.set('Isaac Parker', 58)
-puts hash_map.get('Isaac Parker') == 58 ? 'Correct' : 'False'
-hash_map.set('Jasmine Evans', 35)
-puts hash_map.get('Jasmine Evans') == 35 ? 'Correct' : 'False'
-hash_map.set('Kevin Edwards', 82)
-puts hash_map.get('Kevin Edwards') == 82 ? 'Correct' : 'False'
-hash_map.set('Laura Collins', 12)
-puts hash_map.get('Laura Collins') == 12 ? 'Correct' : 'False'
-hash_map.set('Marcus Stewart', 69)
-puts hash_map.get('Marcus Stewart') == 69 ? 'Correct' : 'False'
 hash_map.set('Nora Sanchez', 47)
 puts hash_map.get('Nora Sanchez') == 47 ? 'Correct' : 'False'
 hash_map.set('Oscar Morris', 90)
@@ -114,3 +102,22 @@ puts hash_map.remove('Daisy Perez')
 puts hash_map.get('Daisy Perez') == 43 ? 'False' : 'Correct'
 puts hash_map.remove('Wyatt Rivera')
 puts hash_map.has?('Wyatt Rivera')
+puts hash_map.length
+puts hash_map.keys.inspect
+puts hash_map.clear
+puts hash_map.length
+hash_map.set('Hannah Campbell', 5)
+puts hash_map.get('Hannah Campbell') == 5 ? 'Correct' : 'False'
+hash_map.set('Isaac Parker', 58)
+puts hash_map.get('Isaac Parker') == 58 ? 'Correct' : 'False'
+hash_map.set('Jasmine Evans', 35)
+puts hash_map.get('Jasmine Evans') == 35 ? 'Correct' : 'False'
+hash_map.set('Kevin Edwards', 82)
+puts hash_map.get('Kevin Edwards') == 82 ? 'Correct' : 'False'
+hash_map.set('Laura Collins', 12)
+puts hash_map.get('Laura Collins') == 12 ? 'Correct' : 'False'
+hash_map.set('Marcus Stewart', 69)
+puts hash_map.get('Marcus Stewart') == 69 ? 'Correct' : 'False'
+puts hash_map.keys.inspect
+puts hash_map.values.inspect
+puts hash_map.entries.inspect

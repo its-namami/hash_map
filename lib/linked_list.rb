@@ -39,6 +39,7 @@ class LinkedList
   end
 
   def each_keyval(node = first_node, &block)
+    return enum_for(:each_keyval) unless block_given?
     return if node.nil?
 
     yield node.key, node.value

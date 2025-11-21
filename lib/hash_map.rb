@@ -37,6 +37,39 @@ class HashMap
     removed.first
   end
 
+  def length
+    capacity - buckets.count(nil)
+  end
+
+  def clear
+    self.buckets = Array.new(16)
+    self.capacity = 16
+  end
+
+  def keys
+    search_all(search_keys: true)
+  end
+
+  def values
+    search_all(search_values: true)
+  end
+
+  def entries
+    search_all(search_keys: true, search_values: true)
+  end
+
+  def search_all(search_keys: false, search_values: false)
+    buckets.each_with_object([]) do |bucket, arr|
+      if search_keys && search_values
+        bucket&.each_keyval { |key, value| arr << [key, value] }
+      elsif search_keys
+        bucket&.each_keyval { |key, _| arr << key }
+      elsif search_values
+        bucket&.each_keyval { |_, value| arr << value }
+      end
+    end
+  end
+
   private
 
   def bucket_index(string)
