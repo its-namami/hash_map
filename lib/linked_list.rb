@@ -6,51 +6,58 @@ require_relative 'node'
 class LinkedList
   attr_reader :first_node
 
-  def initialize(value = nil)
-    self.first_node = Node.new(value) if value
+  def initialize(key, value = nil)
+    self.first_node = Node.new(key, value) if key
   end
 
-  def add(value)
-    return self.first_node = Node.new(value) unless first_node
+  def add(key, value)
+    return self.first_node = Node.new(key, value) unless first_node
 
-    self.first_node = Node.new(value, first_node)
+    self.first_node = Node.new(key, value, first_node)
   end
 
   def in_list?(value)
-    return false unless first_node
-
-    list_search(value)
+    !!value_search(value)
   end
 
-  # Speial method for key-value array search
   def find(key)
-    return unless first_node
-
-    special_search(key)
+    key_search(key).value
   end
 
-  def each_keyval(node = first_node)
-    until node.nil?
-      yield node.value
-      node = node.next_node
-    end
+  def remove(key)
+    node = next_node_search(key: key) || return
+    node.next_node = node.next_node&.next_node
+  end
+
+  def each_keyval(node = first_node, &block)
+    return if node.nil?
+
+    yield node.key, node.value
+    each_keyval(node.next_node, &block)
   end
 
   private
 
   attr_writer :first_node
 
-  def special_search(key, node = first_node)
+  def find_node(node = first_node, &block)
     return if node.nil?
-    return node.value.last if node.value.first.eql?(key)
+    return node if yield(node)
 
-    special_search(key, node.next_node)
+    find_node(node.next_node, &block)
   end
 
-  def list_search(value, node = first_node)
-    return false if node.nil?
-    return true if node.value.eql?(value)
+  def key_search(key)
+    find_node { |node| node.key.eql?(key) }
+  end
 
-    list_search(value, node.next_node)
+  def value_search(value)
+    find_node { |node| node.value.eql?(value) }
+  end
+
+  def next_node_search(key:, value:)
+    return unless key || value
+
+    find_node { |node| node&.next_node&.key.eql?(key || value) }
   end
 end

@@ -2,9 +2,10 @@
 
 # Class that manages a single node of a linked list
 class Node
-  attr_accessor :value, :next_node
+  attr_accessor :key, :value, :next_node
 
-  def initialize(value = nil, next_node = nil)
+  def initialize(key = nil, value = nil, next_node = nil)
+    self.key = key
     self.value = value
     self.next_node = next_node
   end

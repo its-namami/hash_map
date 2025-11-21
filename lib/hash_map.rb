@@ -13,40 +13,45 @@ class HashMap
     self.buckets = Array.new(capacity)
   end
 
-  def hash(string)
-    string.each_char.inject(33) { |hash, char| hash * 5381 + char.to_s.ord * 7 }
-  end
-
   def set(key, value)
-    hash_key = hash(key)
-
-    set_bucket(hash_key % capacity, [hash_key, value])
+    set_bucket(bucket_index(key), key, value)
   end
 
   def get(key)
-    hash_key = hash(key)
-    bucket = buckets[hash_key % capacity]
-
-    bucket&.find(hash_key)
+    bucket = buckets[bucket_index(key)]
+    bucket&.find(key)
   end
 
   def has?(key)
     !!get(key)
   end
 
+  def remove(key)
+    bucket = buckets[bucket_index(key)]
+    bucket.remove(key)
+  end
+
   private
+
+  def bucket_index(string)
+    hash(string) % capacity
+  end
+
+  def hash(string)
+    string.each_char.inject(33) { |hash, char| hash * 5381 + char.to_s.ord * 7 }
+  end
 
   def overloaded?
     buckets.select(&:nil?).size < capacity - capacity * LOAD_FACTOR
   end
 
-  def set_bucket(index, key_val)
+  def set_bucket(index, key, value)
     raise IndexError if index.negative? || index >= buckets.length
 
     if buckets[index]
-      buckets[index].add(key_val)
+      buckets[index].add(key, value)
     else
-      buckets[index] = LinkedList.new(key_val)
+      buckets[index] = LinkedList.new(key, value)
     end
 
     double_capacity if overloaded?
@@ -60,7 +65,7 @@ class HashMap
     old_buckets.each do |bucket|
       next if bucket.nil?
 
-      bucket.each_keyval { |key, value| set_bucket(key % capacity, [key, value]) }
+      bucket.each_keyval { |key, val| set_bucket(bucket_index(key), key, val) }
     end
   end
 
