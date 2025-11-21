@@ -3,8 +3,10 @@
 require 'debug'
 
 require_relative 'lib/hash_map'
+require_relative 'lib/hash_set'
 
 hash_map = HashMap.new
+hash_set = HashSet.new
 
 puts '#####TESTS#####'
 hash_map.set('Alice Johnson', 45)
@@ -121,3 +123,15 @@ puts hash_map.get('Marcus Stewart') == 69 ? 'Correct' : 'False'
 puts hash_map.keys.inspect
 puts hash_map.values.inspect
 puts hash_map.entries.inspect
+
+hash_set.set('Alice Johnson')
+puts hash_set.inspect
+puts hash_set.has?('Alice Johnson')
+puts hash_set.remove('Alice Johnson')
+puts hash_set.has?('Alice Johnson')
+puts hash_set.length
+hash_set.set('Alice Johnson')
+hash_set.set('Boris Johnson')
+puts hash_set.keys.inspect
+hash_set.clear
+puts hash_set.inspect

@@ -4,8 +4,8 @@ require 'debug'
 
 require_relative 'linked_list'
 
-# Class that managess hash map
-class HashMap
+# Class that manages hash set (hash map of only keys)
+class HashSet
   LOAD_FACTOR = 0.75
 
   def initialize
@@ -13,17 +13,13 @@ class HashMap
     self.buckets = Array.new(capacity)
   end
 
-  def set(key, value)
-    set_bucket(bucket_index(key), key, value)
-  end
-
-  def get(key)
-    bucket = buckets[bucket_index(key)]
-    bucket&.find(key)
+  def set(key)
+    set_bucket(bucket_index(key), key)
   end
 
   def has?(key)
-    !!get(key)
+    bucket = buckets[bucket_index(key)]
+    !!bucket&.key_in_list?(key)
   end
 
   def remove(key)
@@ -47,15 +43,9 @@ class HashMap
   end
 
   def keys
-    search_all(search_keys: true)
-  end
-
-  def values
-    search_all(search_values: true)
-  end
-
-  def entries
-    search_all(search_keys: true, search_values: true)
+    buckets.each_with_object([]) do |bucket, arr|
+      bucket&.each_keyval { |key, _| arr << key }
+    end
   end
 
   private
@@ -69,16 +59,16 @@ class HashMap
   end
 
   def overloaded?
-    buckets.count(&:nil?) < capacity - capacity * LOAD_FACTOR
+    buckets.select(&:nil?).size < capacity - capacity * LOAD_FACTOR
   end
 
-  def set_bucket(index, key, value)
+  def set_bucket(index, key)
     raise IndexError if index.negative? || index >= buckets.length
 
     if buckets[index]
-      buckets[index].add(key, value)
+      buckets[index].add(key)
     else
-      buckets[index] = LinkedList.new(key, value)
+      buckets[index] = LinkedList.new(key)
     end
 
     double_capacity if overloaded?
@@ -93,18 +83,6 @@ class HashMap
       next if bucket.nil?
 
       bucket.each_keyval { |key, val| set_bucket(bucket_index(key), key, val) }
-    end
-  end
-
-  def search_all(search_keys: false, search_values: false)
-    buckets.each_with_object([]) do |bucket, arr|
-      if search_keys && search_values
-        bucket&.each_keyval { |key, value| arr << [key, value] }
-      elsif search_keys
-        bucket&.each_keyval { |key, _| arr << key }
-      elsif search_values
-        bucket&.each_keyval { |_, value| arr << value }
-      end
     end
   end
 

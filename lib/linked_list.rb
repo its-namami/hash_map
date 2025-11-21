@@ -20,6 +20,10 @@ class LinkedList
     !!value_search(value)
   end
 
+  def key_in_list?(key)
+    !!key_search(key)
+  end
+
   def find(key)
     key_search(key)&.value
   end
